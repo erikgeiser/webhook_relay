@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 from time import sleep
+import requests
 try:
     import winsound
 except:
@@ -13,7 +14,7 @@ class Client(object):
 
     def beep(self):
         cfg = self.cfg['beep']
-        if int(beepcfg['enabled']):
+        if int(cfg['enabled']):
             if winsound is None:
                 print('[!]: winsound could not be imported: Beeps disabled')
             else:
@@ -22,26 +23,26 @@ class Client(object):
     def query(self):
         cfg = self.cfg['polling']
         try:
-            r = requests.get(cfg['host'],
+            r = requests.get('http://%s' % cfg['host'],
                 auth=(self.cfg['auth']['username'], self.cfg['auth']['password']))
-        except requests.excetions.RequestException as e:
+        except requests.exceptions.RequestException as e:
             if int(cfg['debug']):
                 print('[!] Polling error: %s' % e)
             return
         self.dispatch(r.json())
 
-    def dispatch(data):
+    def dispatch(self, data):
         if data['count']:
             self.beep()
             print('[*] %d new notifications:' % data['count'])
             for i, note in enumerate(data['content']):
-                print('   %d: %s' % (i + 1, note))
+                print('    %d: %s' % (i + 1, note))
 
     def poll(self):
         cfg = self.cfg['polling']
         while True:
             self.query()
-            sleep(cfg['interval'])
+            sleep(int(cfg['interval']))
 
 
 if __name__ == '__main__':

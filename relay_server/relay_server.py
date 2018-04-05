@@ -19,7 +19,7 @@ def dispatch_json():
     print('%s\n' % content)
     return "ok", 200
 
-@app.route('/fetch', methods=['GET'])
+@app.route('/poll', methods=['GET'])
 @basic_auth.required
 def notify_client():
     global notification_buffer
