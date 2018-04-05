@@ -18,10 +18,12 @@ class Client(object):
             if winsound is None:
                 print('[!]: winsound could not be imported: Beeps disabled')
             else:
-                winsound.Beep(beepcfg['frequency'], beepcfg['duration'])
+                winsound.Beep(cfg['frequency'], cfg['duration'])
 
     def query(self):
         cfg = self.cfg['polling']
+        if int(cfg['debug']):
+            print('.', end='')
         try:
             r = requests.get('http://%s' % cfg['host'],
                 auth=(self.cfg['auth']['username'], self.cfg['auth']['password']))
