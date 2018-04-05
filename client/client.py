@@ -22,7 +22,8 @@ class Client(object):
     def query(self):
         cfg = self.cfg['polling']
         try:
-            r = requests.get(cfg['host'])
+            r = requests.get(cfg['host'],
+                auth=(self.cfg['auth']['username'], self.cfg['auth']['password']))
         except requests.excetions.RequestException as e:
             if int(cfg['debug']):
                 print('[!] Polling error: %s' % e)
