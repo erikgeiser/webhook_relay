@@ -44,7 +44,7 @@ class Client(object):
             print('\n\n[*] %d new notifications:' % data['count'])
             for i, note in enumerate(data['content']):
                 print('    %d: %s' % (i + 1, note))
-        elif int(cfg['debug']):
+        elif int(self.cfg['polling']['debug']):
             print('.', end='')
 
 
