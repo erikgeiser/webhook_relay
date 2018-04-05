@@ -44,7 +44,7 @@ class Client(object):
     def dispatch(self, data):
         if data['count']:
             self.beep()
-            print('\n\n[*] %d new notifications:' % data['count'])
+            print('\n\n[*] %d new notification(s):' % data['count'])
             for i, note in enumerate(data['content']):
                 print('    %d: %s' % (i + 1, note))
         elif int(self.cfg['polling']['debug']):
