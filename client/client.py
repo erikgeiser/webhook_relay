@@ -32,7 +32,7 @@ class Client(object):
             r.raise_for_status()
         except requests.exceptions.RequestException as e:
             if r.status_code == 401:
-                print('[!] Invalid credentials: %s' % auth)
+                print('[!] Invalid credentials: %s, %s' % auth)
                 return False
             if int(cfg['debug']):
                 print('[!] Polling error: %s' % e)
