@@ -22,16 +22,24 @@ class Client(object):
 
     def query(self):
         cfg = self.cfg['polling']
+
         if int(cfg['debug']):
             print('.', end='')
+
+        auth = (self.cfg['auth']['username'], self.cfg['auth']['password'])
+        r = requests.get('http://%s' % cfg['host'], auth=auth)
         try:
-            r = requests.get('http://%s' % cfg['host'],
-                auth=(self.cfg['auth']['username'], self.cfg['auth']['password']))
+            r.raise_for_status()
         except requests.exceptions.RequestException as e:
+            if r.status_code = 401:
+                print('[!] Invalid credentials: %s' % auth)
+                return False
             if int(cfg['debug']):
                 print('[!] Polling error: %s' % e)
-            return
+            return True
+
         self.dispatch(r.json())
+        return True
 
     def dispatch(self, data):
         if data['count']:
@@ -43,7 +51,8 @@ class Client(object):
     def poll(self):
         cfg = self.cfg['polling']
         while True:
-            self.query()
+            if not self.query():
+                break
             sleep(int(cfg['interval']))
 
 
