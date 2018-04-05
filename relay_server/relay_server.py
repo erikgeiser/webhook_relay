@@ -1,7 +1,9 @@
-from flask import Flask, request, current_app, jsonify
-from flask_basicauth import BasicAuth
 from configparser import ConfigParser
 from collections import deque
+
+from flask import Flask, request, current_app, jsonify
+from flask_basicauth import BasicAuth
+import request
 
 cfg = ConfigParser()
 cfg.read('config.ini')
@@ -17,6 +19,15 @@ def dispatch_json():
     content = request.json
     notification_buffer.append(content)
     print('%s\n' % content)
+
+    forward_url = cfg['relay']['forward']
+    if forward_url:
+        r = requests.post(forward_url, json=content)
+        try:
+            r.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print("[!] Webhook forward error: %s" % e)
+
     return "ok", 200
 
 @app.route('/poll', methods=['GET'])

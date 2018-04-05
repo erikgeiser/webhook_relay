@@ -9,6 +9,19 @@ try:
 except:
     winsound = None
 
+
+def formatter(dict):
+    try:
+        if dict['content']:
+            yield 'Content: %s' % dict['content']
+        for att in dict['attachments']:
+            yield 'Server: %s' % att['title']
+            for field in att['fields']:
+                yield '  * %s: %s' % (field['title'], field['value'])
+    except KeyError as e:
+        yield str(dict)
+
+
 class Client(object):
 
     def __init__(self):
@@ -45,8 +58,10 @@ class Client(object):
         if data['count']:
             self.beep()
             print('\n\n[*] %d new notification(s):' % data['count'])
-            for i, note in enumerate(data['content']):
-                print('    %d: %s' % (i + 1, note))
+            for i, content in enumerate(data['content']):
+                print('    %d:----------------------' % i + 1)
+                for msg in formatter(content):
+                    print('    %s' % content)
         elif int(self.cfg['polling']['debug']):
             print('.', end='')
             sys.stdout.flush()
