@@ -23,9 +23,6 @@ class Client(object):
     def query(self):
         cfg = self.cfg['polling']
 
-        if int(cfg['debug']):
-            print('.', end='')
-
         auth = (self.cfg['auth']['username'], self.cfg['auth']['password'])
         r = requests.get('http://%s' % cfg['host'], auth=auth)
         try:
@@ -47,6 +44,9 @@ class Client(object):
             print('\n\n[*] %d new notifications:' % data['count'])
             for i, note in enumerate(data['content']):
                 print('    %d: %s' % (i + 1, note))
+        elif int(cfg['debug']):
+            print('.', end='')
+
 
     def poll(self):
         cfg = self.cfg['polling']
