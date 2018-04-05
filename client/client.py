@@ -18,7 +18,7 @@ class Client(object):
             if winsound is None:
                 print('[!]: winsound could not be imported: Beeps disabled')
             else:
-                winsound.Beep(cfg['frequency'], cfg['duration'])
+                winsound.Beep(int(cfg['frequency']), int(cfg['duration']))
 
     def query(self):
         cfg = self.cfg['polling']
