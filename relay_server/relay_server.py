@@ -9,7 +9,7 @@ app = Flask(__name__)
 basic_auth = BasicAuth(app)
 app.config['BASIC_AUTH_USERNAME'] = cfg['auth']['username']
 app.config['BASIC_AUTH_PASSWORD'] = cfg['auth']['password']
-notification_buffer = deque(maxlen=cfg['relay']['buffersize'])
+notification_buffer = deque(maxlen=int(cfg['relay']['buffersize']))
 
 @app.route('/webhook', methods=['POST'])
 def dispatch_json():
