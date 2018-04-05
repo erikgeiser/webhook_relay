@@ -10,13 +10,17 @@ except:
     winsound = None
 
 
+
 def formatter(dict):
+    keyprio = {'Reason': 0, 'Reporter': 1, 'Target': 2}
+    sortkey = lambda key: keyprio.get(key['title'], 99999)
     try:
-        if dict['content']:
+        if dict['content'] and dict['content'] != '@here':
             yield 'Content: %s' % dict['content']
+        yield 'Time: %s' % dict['time']
         for att in dict['attachments']:
             yield 'Server: %s' % att['title']
-            for field in att['fields']:
+            for field in sorted(att['fields'], key=sortkey):
                 yield '  * %s: %s' % (field['title'], field['value'])
     except KeyError as e:
         yield str(dict)
@@ -59,9 +63,10 @@ class Client(object):
             self.beep()
             print('\n\n[*] %d new notification(s):' % data['count'])
             for i, content in enumerate(data['content']):
-                print('    %d:----------------------' % i + 1)
+                print('    %d:' % (i + 1), end='')
+                print('------------------------------------------------------')
                 for msg in formatter(content):
-                    print('    %s' % content)
+                    print('    %s' % msg)
         elif int(self.cfg['polling']['debug']):
             print('.', end='')
             sys.stdout.flush()

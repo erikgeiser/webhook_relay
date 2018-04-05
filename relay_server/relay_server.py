@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 from collections import deque
+from datetime import datetime
 
 from flask import Flask, request, current_app, jsonify
 from flask_basicauth import BasicAuth
@@ -17,6 +18,7 @@ notification_buffer = deque(maxlen=int(cfg['relay']['buffersize']))
 def dispatch_json():
     global notification_buffer
     content = request.json
+    content['time'] = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
     notification_buffer.append(content)
     print('%s\n' % content)
 
