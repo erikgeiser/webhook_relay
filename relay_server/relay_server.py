@@ -33,5 +33,5 @@ def notify_client():
 if __name__ == '__main__':
     app.run(
         host=cfg['server']['host'],
-        port=cfg['server']['port']
+        port=int(cfg['server']['port'])
     )
