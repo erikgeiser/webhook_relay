@@ -1,6 +1,9 @@
+import sys
 from configparser import ConfigParser
 from time import sleep
+
 import requests
+
 try:
     import winsound
 except:
@@ -46,7 +49,7 @@ class Client(object):
                 print('    %d: %s' % (i + 1, note))
         elif int(self.cfg['polling']['debug']):
             print('.', end='')
-
+            sys.stdout.flush()
 
     def poll(self):
         cfg = self.cfg['polling']
